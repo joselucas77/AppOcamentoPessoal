@@ -14,6 +14,7 @@ class Despesas {
                 return false
             }
         }
+
         return true
     }
 }
