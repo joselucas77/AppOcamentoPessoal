@@ -55,6 +55,7 @@ class Bd {
                 continue
             }
 
+            despesa.id = i
             despesas.push(despesa)
         }
 
@@ -98,9 +99,14 @@ class Bd {
         // console.log(despesasFiltradas)
 
         return despesasFiltradas
-        
-
     }
+
+    remover(id) {
+        localStorage.removeItem(id)
+
+        window.location.reload()
+    }
+
 }
 
 let bd = new Bd()
@@ -186,10 +192,23 @@ function carregarLista(despesas = Array(), filtro = false) {
         let btn = document.createElement('button')
         btn.className = 'btn btn-danger'
         btn.innerHTML = '<i class="fas fa-times"></i>'
+        btn.id = `id_despesa:${d.id}`
         btn.onclick = function() {
-            alert('remover')
+            let id = this.id.replace('id_despesa:', '')
+
+            let confirmar = confirm('Esta despesa será apagada. confirmar?')
+
+            console.log(confirmar)
+
+            if(confirmar == true) {
+                // console.log('Apagado')
+                bd.remover(id)
+            }
+ 
         }
         linha.insertCell(4).append(btn)
+
+        console.log(d)
 
     })
 
