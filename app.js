@@ -1,3 +1,4 @@
+// objeto com os valores da despesa
 class Despesas {
     constructor(ano, mes, dia, tipo, descricao, valor) {
         this.ano = ano
@@ -19,6 +20,7 @@ class Despesas {
     }
 }
 
+// objeto banco de dados
 class Bd {
     constructor() {
         let id = localStorage.getItem('id')
@@ -96,8 +98,6 @@ class Bd {
         if(despesa.valor != '') {
             despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor)
         }
-
-        // console.log(despesasFiltradas)
 
         return despesasFiltradas
     }
@@ -199,7 +199,7 @@ function carregarLista(despesas = Array(), filtro = false) {
 
             let confirmar = confirm('Esta despesa será apagada. confirmar?')
 
-            console.log(confirmar)
+            // console.log(confirmar)
 
             if(confirmar == true) {
                 // console.log('Apagado')
@@ -209,7 +209,7 @@ function carregarLista(despesas = Array(), filtro = false) {
         }
         linha.insertCell(4).append(btn)
 
-        console.log(d)
+        // console.log(d)
 
     })
 
@@ -228,5 +228,61 @@ function pesquisarDespesa() {
     let despesas = bd.pesquisar(despesa)
 
     carregarLista(despesas, true)
+    // console.log(despesas)
 }
 
+////////////////////////////////////////////////
+
+function setupPagination(items, wrapper, rows_per_page) {
+    wrapper.innerHTML = ""
+    
+
+    let page_count = Math.ceil(items.length / rows_per_page)
+
+    for(let i = 1; i < page_count + 1; i++) {
+        let btn = paginationButton(i, items)
+        let link = paginationLink(i)
+
+        wrapper.appendChild(btn)
+        btn.appendChild(link)
+    }
+}
+
+function paginationButton(page, items) {
+    let button = document.createElement('li')
+    
+    button.classList.add('page-item')
+
+    if(current_page == page) {
+        button.classList += ' active'
+    }
+
+    button.addEventListener('click', function() {
+        current_page = page
+        displayList(items, list_element, rows, current_page)
+
+        let current_btn = document.querySelector('li.active')
+        current_btn.classList.remove('active')
+
+        button.classList.add('active')
+    })
+
+    return button
+}
+
+function paginationLink(page) {
+    let link = document.createElement('a')
+    link.classList.add('page-link')
+
+    link.innerText = page
+
+    return link
+}
+
+let pagination_element = document.getElementById('navegacao')
+
+items = bg.recuperarRegistros()
+let current_page = 1 //página atual
+let rows = 4  //linhas por página
+
+setupPagination(items, pagination_element, rows)
